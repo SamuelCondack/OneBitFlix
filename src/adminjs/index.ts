@@ -3,7 +3,7 @@ import AdminJSExpress from "@adminjs/express";
 import AdminJSSequelize from "@adminjs/sequelize";
 import { sequelize } from "../database";
 import { adminJsResources } from "./resources";
-import { User } from "../models";
+import { Category, Course, Episode, User } from "../models";
 import bcrypt from 'bcrypt'
 import { locale } from './locale'
 
@@ -35,26 +35,41 @@ export const adminJs = new AdminJS({
             }
         }
     },
-    locale: locale
+    locale: locale,
+    dashboard: {
+        component: AdminJS.bundle('./components/Dashboard'),
+        handler: async (req, res, context) => {
+            const courses = await Course.count()
+            const episodes = await Episode.count()
+            const category = await Category.count()
+            const standardUsers = await User.count({ where: { role: 'user' } })
+
+            res.json({
+                'Cursos': courses,
+                'Episódios': episodes,
+                'Categorias': category,
+                'Usuários': standardUsers
+            })
+        },
+    }
 })
 export const adminJsRouter = AdminJSExpress.buildAuthenticatedRouter(adminJs, {
     authenticate: async (email, password) => {
-      const user = await User.findOne({ where: { email } })
-  
-      if (user && user.role === 'admin') {
-        const matched = await bcrypt.compare(password, user.password)
-  
-        if (matched) {
-          return user
+        const user = await User.findOne({ where: { email } })
+
+        if (user && user.role === 'admin') {
+            const matched = await bcrypt.compare(password, user.password)
+
+            if (matched) {
+                return user
+            }
         }
-      }
-  
-      return false
+
+        return false
     },
     cookiePassword: 'senha-do-cookie'
-  }, null, {
-      resave: false,
-      saveUninitialized: false
-  })
+}, null, {
+    resave: false,
+    saveUninitialized: false
+})
 
-  
