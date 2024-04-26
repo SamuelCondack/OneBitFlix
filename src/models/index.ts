@@ -8,8 +8,7 @@ import { Like } from './Like'
 Category.hasMany(Course)
 
 Course.belongsTo(Category)
-Course.hasMany(Episode)
-Course.belongsToMany(User, { through: Favorite })
+Course.hasMany(Episode, { as: 'episodes' });Course.belongsToMany(User, { through: Favorite })
 Course.hasMany(Favorite, { as: 'favoritesUsers', foreignKey: 'course_id' })
 Course.belongsToMany(User, { through: Favorite })
 Course.belongsToMany(User, { through: Like })
