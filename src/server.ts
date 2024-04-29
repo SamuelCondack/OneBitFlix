@@ -16,7 +16,7 @@ app.use(router)
 
 app.use(adminJs.options.rootPath, adminJsRouter)
 
-const PORT = process.env.port || 3001
+const PORT = process.env.port || 3000
 
 app.listen(PORT, async () => {
   await sequelize.authenticate().then(() => {
