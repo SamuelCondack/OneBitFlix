@@ -12,7 +12,7 @@ export const authController = {
       const userAlreadyExists = await userService.findByEmail(email)
 
       if (userAlreadyExists) {
-        throw new Error('Este e-mail já está cadastrado.')
+        throw new Error('This e-mail has already been registered in another account!')
       }
 
       const user = await userService.create({
