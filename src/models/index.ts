@@ -6,7 +6,7 @@ import { User } from './User'
 import { Like } from './Like'
 import { WatchTime } from './watchTime'
 
-Category.hasMany(Course)
+Category.hasMany(Course, {as: 'courses'})
 
 Course.belongsTo(Category)
 Course.hasMany(Episode, { as: 'episodes' });Course.belongsToMany(User, { through: Favorite })
